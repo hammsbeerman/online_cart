@@ -6,6 +6,10 @@ def product(request, pk):
     product = Product.objects.get(id=pk)
     return render(request, 'store/product.html', {'product':product})
 
+def category_summary(request):
+    categories = Category.objects.all()
+    return render(request, 'store/category_summary.html', {'categories':categories})
+
 def category(request, cat):
     #Replace hyphens with spaces
     cat = cat.replace('-', ' ')
