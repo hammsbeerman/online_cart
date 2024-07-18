@@ -41,14 +41,13 @@
                             <div class="row justify-content-center">
                                 <div class="col-md-2">Qty:</div>
                                 <div class="col-md-3">
-                                <select class="form-select" id="qty-cart">
-                                    <option selected>
-                                        {% for key, value in quantities.items %}
-                                            {% if key == product.id|slugify %}
-                                                {{ value }}
-                                            {% endif %}
-                                        {% endfor %}
-                                    </option>
+                                <select class="form-select" id="select{{product.id}}">
+                                    {% for key, value in quantities.items %}
+                                        <!-- Convert product.id to integer -->
+                                        {% if key == product.id|slugify %}
+                                        <option selected>{{ value }}</option>
+                                        {% endif %}
+                                    {% endfor %}
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
@@ -57,6 +56,7 @@
                             </div>
                             <br/>
                         <a href="{% url 'home' %}" class="btn btn-secondary">Home</a>
+                        <button type="button" data-index="{{product.id}}" class="btn btn-secondary update-cart">Update</button>
                         
                             </center>
                         </div>
@@ -71,4 +71,42 @@
             </center>
             <br/><br/>
             {% endif %}
-{% endblock %}
+
+
+<script>
+    // Check if button pressed
+    //update-cart is a class, not an id, so use .
+    $(document).on('click', '.update-cart', function(e){
+        e.preventDefault();
+        // grab the product id
+        var productid = $(this).data('index');
+        $.ajax({
+            type: 'POST',
+            url: '{% url 'cart:cart_update' %}',
+            data: {
+            product_id: $(this).data('index'),
+            product_qty: $('#select' + productid + ' option:selected').text(),
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            action: 'post'
+            },
+
+        success: function(json){
+          //console.log(json)
+          //document.getElementById('cart_quantity').textContent = json.qty
+          location.reload();
+        },
+
+        error: function(xhr, errmsg, err){
+
+        }
+      });
+    })
+
+   
+    
+      
+      
+      
+      </script>
+
+      {% endblock %}
