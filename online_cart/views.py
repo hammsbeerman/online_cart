@@ -1,5 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from django import forms
+from .forms import SignUpForm
 from django.contrib import messages
 from store.models import Product
 
@@ -28,3 +32,21 @@ def logout_user(request):
     logout(request)
     messages.success(request, ("You have been logged out"))
     return redirect('home')
+
+def register_user(request):
+    form = SignUpForm()
+    if request.method == "POST":
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            messages.success(request, ("You have been registered and logged in"))
+            return redirect('home')
+        else:
+           messages.success(request, ("There was a problem. Please try again")) 
+           return redirect('register')
+    else:
+        return render(request, 'register.html', {'form':form})

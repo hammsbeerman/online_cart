@@ -8,16 +8,20 @@ from .views import (
     about,
     login_user,
     logout_user,
+    register_user,
 )
 
 urlpatterns = [
     path('', home_view, name='home'),
     path('admin/', admin.site.urls),
-    #path('', include('store.urls')),
+    path('cart', include('cart.urls')),
     path('store', include('store.urls')),
+    #path('', include('store.urls')),
     path('about', about, name='about'),
     path('login', login_user, name='login'),
     path('logout', logout_user, name='logout'),
+    path('register', register_user, name='register'),
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
