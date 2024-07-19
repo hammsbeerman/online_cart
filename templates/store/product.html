@@ -67,6 +67,7 @@
             //console.log(json)
             document.getElementById('cart_quantity').
               textContent = json.qty
+            location.reload();
           },
 
           error: function(xhr, errmsg, err){
@@ -74,6 +75,8 @@
           }
         });
       })
+
+      $('#message').delay(2000).fadeOut('slow');
 
      
       
