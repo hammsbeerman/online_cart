@@ -9,6 +9,8 @@ from .views import (
     login_user,
     logout_user,
     register_user,
+    update_user,
+    update_password,
 )
 
 urlpatterns = [
@@ -21,6 +23,8 @@ urlpatterns = [
     path('login', login_user, name='login'),
     path('logout', logout_user, name='logout'),
     path('register', register_user, name='register'),
+    path('update_user', update_user, name='update_user'),
+    path('update_password', update_password, name='update_password'),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
